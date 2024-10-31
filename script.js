@@ -82,3 +82,35 @@ sr.reveal(`.specs__data, .discount__animate`,{origin: 'left', interval: 100})
 sr.reveal(`.specs__img, .discount__img`,{origin: 'right'})
 sr.reveal(`.case__img`,{origin: 'top'})
 sr.reveal(`.case__data`)
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const stars = document.querySelectorAll('.rating__stars i');
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const rating = star.getAttribute('data-value');
+            stars.forEach(s => {
+                s.classList.remove('active');
+                if (s.getAttribute('data-value') <= rating) {
+                    s.classList.add('active');
+                }
+            });
+            document.querySelector('.rating__text').textContent = `You rated this ${rating} stars`;
+        });
+    });
+
+    // Intersection Observer for rating section
+    const ratingSection = document.querySelector('.rating');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                ratingSection.classList.add('visible');
+                observer.unobserve(ratingSection);
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    observer.observe(ratingSection);
+});
